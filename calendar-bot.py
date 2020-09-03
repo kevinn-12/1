@@ -35,9 +35,6 @@ def calendar(start, end):
 
     service = build('calendar', 'v3', credentials=creds)
 
-    # Create Event
-    # start = '2020-09-02T15:00:00'
-    # end = '2020-09-02T15:30:00'
     start = str(start)
     end = str(end)
 
@@ -48,5 +45,10 @@ def calendar(start, end):
        }
     service.events().insert(calendarId='primary', body=event).execute()
 
-if __name__ == '__main__':
-    calendar()
+dates = mail()
+for start, end in zip(dates[0::2], dates[1::2]):
+    # print(start, end)
+    calendar(start, end)
+
+# if __name__ == '__main__':
+#     calendar()

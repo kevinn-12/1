@@ -27,7 +27,7 @@ def mail():
         date_time_list = []
         for message in messages:
             # Marking as unread
-            # service.users().messages().modify(userId='me', id=message['id'], body={'removeLabelIds': ['UNREAD']}).execute()
+            service.users().messages().modify(userId='me', id=message['id'], body={'removeLabelIds': ['UNREAD']}).execute()
             # Getting Time
             msg = service.users().messages().get(userId='me', id=message['id']).execute()
             date_time = re.findall("\d{2}[-/]\d{2}[-/]\d{4}\s\d{2}[:/]\d{2}", str(msg))
