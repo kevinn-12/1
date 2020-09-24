@@ -1,7 +1,9 @@
 from __future__ import print_function
 import datetime
 import pickle
-import os.path
+import os
+from os import path
+import sys
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -18,8 +20,8 @@ def calendar(start, end):
     # The file token.pickle.calendar stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle.calendar'):
-        with open('token.pickle.calendar', 'rb') as token:
+    if os.path.exists(os.path.join(sys._MEIPASS, 'token.pickle.calendar')):
+        with open(os.path.join(sys._MEIPASS, 'token.pickle.calendar'), 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -27,10 +29,10 @@ def calendar(start, end):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials-calendar.json', SCOPES)
+                os.path.join(sys._MEIPASS, 'credentials-calendar.json'), SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle.calendar', 'wb') as token:
+        with open(os.path.join(sys._MEIPASS,'token.pickle.calendar'), 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)

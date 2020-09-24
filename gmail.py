@@ -3,20 +3,23 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 import re
 from datetime import datetime
+import os
+from os import path
+import sys
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
 
 def mail():
 
-    store = file.Storage('token.json')
+    store = file.Storage(os.path.join(sys._MEIPASS, 'token.json'))
     creds = store.get()
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets(os.path.join(sys._MEIPASS, 'credentials.json'), SCOPES)
         creds = tools.run_flow(flow, store)
     service = build('gmail', 'v1', http=creds.authorize(Http()))
 
     # Filter
-    querry = "from:no-reply@tilburguniversity.edu is:unread subject:Tilburg University Sports Center Online booking"
+    querry = "from:no-reply@delcom.uvt.nl is:unread subject:Tilburg University Sports Center Online booking"
 
     results = service.users().messages().list(userId='me',labelIds = ['INBOX'], q = querry).execute()
     messages = results.get('messages', [])
